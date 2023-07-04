@@ -5,7 +5,7 @@ class InformationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("Information belum woy"),
+        child: Text("Information belum pak"),
       ),
     );
   }
