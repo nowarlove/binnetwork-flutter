@@ -8,13 +8,15 @@ import 'traceroute.dart';
 import 'whois.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
@@ -22,7 +24,10 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -31,33 +36,32 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: prefer_typing_uninitialized_variables
     var container;
     if (currentPage == DrawerSections.information) {
-      container = InformationPage();
+      container = const InformationPage();
     } else if (currentPage == DrawerSections.ping) {
-      container = PingPage();
+      container = const PingPage();
     } else if (currentPage == DrawerSections.speedtest) {
-      container = SpeedtestPage();
+      container = const SpeedtestPage();
     } else if (currentPage == DrawerSections.traceroute) {
-      container = TraceroutePage();
+      container = const TraceroutePage();
     } else if (currentPage == DrawerSections.whois) {
-      container = WhoisPage();
+      container = const WhoisPage();
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 222, 46, 204),
-        title: Text("BinNet"),
+        backgroundColor: const Color.fromARGB(255, 222, 46, 204),
+        title: const Text("BinNet"),
       ),
       body: container,
       drawer: Drawer(
         child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                Sidebar(),
-                myDrawerList(),
-              ],
-            ),
+          child: Column(
+            children: [
+              const Sidebar(),
+              myDrawerList(),
+            ],
           ),
         ),
       ),
@@ -66,7 +70,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget myDrawerList() {
     return Container(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 15,
       ),
       child: Column(
@@ -89,7 +93,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget menuItem(int id, String title, IconData icon, bool selected) {
     return Material(
-      color: selected ? Color.fromARGB(189, 223, 60, 212) : Colors.transparent,
+      color: selected
+          ? const Color.fromARGB(189, 223, 60, 212)
+          : Colors.transparent,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -108,7 +114,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         child: Padding(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: Row(
             children: [
               Expanded(
@@ -122,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                 flex: 3,
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                   ),

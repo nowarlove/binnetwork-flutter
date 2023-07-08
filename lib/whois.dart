@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WhoisPage extends StatelessWidget {
+  const WhoisPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("Whoooooooooooisssssss"),
-      ),
+    return const Center(
+      child: Text("Whoooooooooooisssssss"),
     );
   }
 }
