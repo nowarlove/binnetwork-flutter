@@ -5,8 +5,11 @@ class SpeedTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("SpeedTest"),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Speedtest'),
+        backgroundColor: const Color.fromARGB(255, 240, 69, 206),
+      ),
     );
   }
 }
