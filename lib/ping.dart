@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:ping_discover_network_forked/ping_discover_network_forked.dart';
+import 'package:dart_ping/dart_ping.dart';
 
 class PingPage extends StatefulWidget {
-  const PingPage({super.key});
+  const PingPage({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,61 +10,74 @@ class PingPage extends StatefulWidget {
 }
 
 class _PingPageState extends State<PingPage> {
-  String ipAddress = '';
-  String pingResult = '';
+  String _pingResult = '';
+  final TextEditingController _ipController = TextEditingController();
 
-  Future<void> performPing() async {
-    setState(() {
-      pingResult = 'Pinging $ipAddress...\n';
+  void _performPing() async {
+    final ping = Ping(_ipController.text, count: 5);
+    final pingStream = ping.stream;
+
+    pingStream.listen((PingData pingData) {
+      setState(() {
+        _pingResult += '$pingData ms\n';
+      });
     });
+    await ping.stop();
+  }
 
-    final stream = NetworkAnalyzer.discover2(ipAddress, 1);
+  void _clearOutput() {
+    setState(() {
+      _pingResult = '';
+    });
+  }
 
-    await for (final NetworkAddress addr in stream) {
-      if (addr.exists) {
-        setState(() {
-          pingResult += 'Reply from ${addr.ip}: time={duration}ms\n';
-        });
-      } else {
-        setState(() {
-          pingResult += 'Request timed out\n';
-        });
-      }
-    }
+  @override
+  void dispose() {
+    _ipController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            "Ping",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ping'),
+        backgroundColor: const Color.fromARGB(255, 240, 69, 206),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _ipController,
+              decoration: const InputDecoration(
+                labelText: 'IP Address',
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            onChanged: (value) {
-              setState(() {
-                ipAddress = value;
-              });
-            },
-            decoration: const InputDecoration(
-              labelText: 'IP Address or Host',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _performPing,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 227, 114, 217),
+                  ),
+                  child: const Text('Perform Ping'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: _clearOutput,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 227, 114, 217),
+                  ),
+                  child: const Text('Clear Output'),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: performPing,
-            child: const Text('Ping'),
-          ),
-          const SizedBox(height: 20),
-          Text(pingResult),
-        ],
+            const SizedBox(height: 20),
+            Text(_pingResult),
+          ],
+        ),
       ),
     );
   }

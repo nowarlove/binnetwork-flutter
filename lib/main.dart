@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     } else if (currentPage == DrawerSections.ping) {
       container = const PingPage();
     } else if (currentPage == DrawerSections.speedtest) {
-      container = const SpeedtestPage();
+      container = const SpeedTestPage();
     } else if (currentPage == DrawerSections.traceroute) {
       container = const TraceroutePage();
     } else if (currentPage == DrawerSections.whois) {
