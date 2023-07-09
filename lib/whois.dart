@@ -15,35 +15,60 @@ class _WhoisPageState extends State<WhoisPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            decoration: const InputDecoration(
-              labelText: 'Domain Name',
-              hintText: 'Enter a domain name',
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Whois'),
+        backgroundColor: const Color.fromARGB(255, 240, 69, 206),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Domain Name',
+                hintText: 'Enter a domain name',
+              ),
+              onChanged: (value) {
+                setState(() {
+                  domain = value;
+                });
+              },
             ),
-            onChanged: (value) {
-              setState(() {
-                domain = value;
-              });
-            },
           ),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            _getWhoisInfo();
-          },
-          child: const Text('Check Whois'),
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Text(result),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _getWhoisInfo();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 227, 114, 217),
+                ),
+                child: const Text('Check Whois'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    result = '';
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 227, 114, 217),
+                ),
+                child: const Text('Clear Output'),
+              ),
+            ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Text(result),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

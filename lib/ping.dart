@@ -44,40 +44,47 @@ class _PingPageState extends State<PingPage> {
         title: const Text('Ping'),
         backgroundColor: const Color.fromARGB(255, 240, 69, 206),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
               controller: _ipController,
               decoration: const InputDecoration(
                 labelText: 'IP Address',
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: _performPing,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 227, 114, 217),
-                  ),
-                  child: const Text('Perform Ping'),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: _performPing,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 227, 114, 217),
                 ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: _clearOutput,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 227, 114, 217),
-                  ),
-                  child: const Text('Clear Output'),
+                child: const Text('Perform Ping'),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: _clearOutput,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 227, 114, 217),
                 ),
-              ],
+                child: const Text('Clear Output'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Text(_pingResult),
+              ),
             ),
-            const SizedBox(height: 20),
-            Text(_pingResult),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
