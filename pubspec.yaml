@@ -15,6 +15,7 @@ dependencies:
   dart_ping: ^8.0.1
   whois: ^1.0.0
   flutter_traceroute: ^0.0.1+2
+  speed_test_dart: ^1.0.0
   
 dev_dependencies:
   flutter_test:
