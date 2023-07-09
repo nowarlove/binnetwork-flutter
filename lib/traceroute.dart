@@ -59,7 +59,7 @@ class _TraceroutePageState extends State<TraceroutePage> {
 
       try {
         final List<dynamic> hops =
-            await traceroute.trace(domain as TracerouteArgs).toList();
+            await traceroute.trace(TracerouteArgs(host: domain)).toList();
 
         // ignore: unused_local_variable
         for (TracerouteStep hop in hops) {
