@@ -13,6 +13,7 @@ class TraceroutePage extends StatefulWidget {
 class _TraceroutePageState extends State<TraceroutePage> {
   String domain = '';
   List<String> tracerouteResults = [];
+  bool performingTraceroute = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +23,8 @@ class _TraceroutePageState extends State<TraceroutePage> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             decoration: const InputDecoration(
-              labelText: 'Domain Name',
-              hintText: 'Enter a domain name',
+              labelText: 'IP Address',
+              hintText: 'Enter an IP address',
             ),
             onChanged: (value) {
               setState(() {
@@ -33,9 +34,14 @@ class _TraceroutePageState extends State<TraceroutePage> {
           ),
         ),
         ElevatedButton(
-          onPressed: () {
-            _performTraceroute();
-          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: performingTraceroute
+                ? Colors.grey
+                : Colors.blue,
+          ),
+          onPressed: performingTraceroute
+            ? null
+            : () { _performTraceroute(); },
           child: const Text('Perform Traceroute'),
         ),
         const SizedBox(height: 16),
@@ -52,26 +58,40 @@ class _TraceroutePageState extends State<TraceroutePage> {
     );
   }
 
-  Future<void> _performTraceroute() async {
+  bool isValidIpAddress(String ipAddress) {
+    const pattern =
+        r'^(([01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}([01]?\d{1,2}|2[0-4]\d|25[0-5])$';
+
+    final regex = RegExp(pattern);
+    return regex.hasMatch(ipAddress);
+  }
+
+  // Keterbatasan: Hanya bisa Tracerouting alamat IP
+  void _performTraceroute() {
     if (domain.isNotEmpty) {
       tracerouteResults.clear();
-      final traceroute = FlutterTraceroute();
 
-      try {
-        final List<dynamic> hops =
-            await traceroute.trace(TracerouteArgs(host: domain)).toList();
+      if (isValidIpAddress(domain)) {
+        final traceroute = FlutterTraceroute();
 
-        // ignore: unused_local_variable
-        for (TracerouteStep hop in hops) {
+        final stream = traceroute.trace(TracerouteArgs(host: domain));
+
+        stream.listen((event) {
           setState(() {
-            // ignore: prefer_typing_uninitialized_variables
-            var hop;
-            tracerouteResults.add('Hop: ${hop.hop}, IP: ${hop.ip}');
+            performingTraceroute = true;
+            final result = event.toString();
+            tracerouteResults.add(result);
+
+            if (result.contains(domain)) {
+              setState(() {
+                performingTraceroute = false;
+              });
+            }
           });
-        }
-      } catch (e) {
+        });
+      } else {
         setState(() {
-          tracerouteResults.add('Error: $e');
+          tracerouteResults.add('Invalid IP address');
         });
       }
     }
